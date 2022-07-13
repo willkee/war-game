@@ -9,7 +9,7 @@ const Player = ({ deck }) => {
 						<td>Current Card</td>
 					</tr>
 					<tr>
-						<td>{deck?.length - 1}</td>
+						{/* <td>{deck?.length - 1}</td> */}
 						<td>{deck && deck[0]}</td>
 					</tr>
 				</tbody>

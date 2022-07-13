@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Player from "../player";
+import Player from "../Player";
 import { shuffleDeck, deck, values } from "./deck";
 
 const Cards = () => {
