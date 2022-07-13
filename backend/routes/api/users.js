@@ -11,7 +11,17 @@ const validateSignup = [
 	check("username")
 		.exists({ checkFalsy: true })
 		.isLength({ min: 4, max: 30 })
-		.withMessage("Please provide a username between 4 and 30 characters."),
+		.withMessage("Please provide a username between 4 and 30 characters.")
+		.custom(async (_value, { req }) => {
+			const query = await User.findOne({
+				where: { username: req.body.username },
+			});
+			if (query) {
+				return await Promise.reject(
+					"Username is already in use. Login instead?"
+				);
+			}
+		}),
 	check("password")
 		.exists({ checkFalsy: true })
 		.isLength({ min: 6, max: 256 })
@@ -45,6 +55,7 @@ router.post(
 	validateSignup,
 	asyncHandler(async (req, res) => {
 		const { username, password } = req.body;
+		console.log(username, password, "SADFSDJHFKJSDF");
 		const user = await User.create({ username, password });
 		await setTokenCookie(res, user);
 		return res.json({ user });

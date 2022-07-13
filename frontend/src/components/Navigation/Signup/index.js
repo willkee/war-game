@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { signup } from "../../../store/user";
 
@@ -10,6 +10,14 @@ const Signup = () => {
 	const [errors, setErrors] = useState([]);
 
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		return () => {
+			setUsername("");
+			setPassword("");
+			setConfirmPassword("");
+		};
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -29,7 +37,8 @@ const Signup = () => {
 			setPassword("");
 			setConfirmPassword("");
 		} catch (err) {
-			console.error("Error: ", err);
+			const data = await err.json();
+			if (data && data.errors) setErrors(data.errors);
 		}
 	};
 	return (
@@ -50,12 +59,14 @@ const Signup = () => {
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					placeholder="Password"
+					autoComplete="none"
 				></input>
 				<input
 					type="password"
 					value={confirmPassword}
 					onChange={(e) => setConfirmPassword(e.target.value)}
 					placeholder="Confirm Password"
+					autoComplete="none"
 				></input>
 				<button>Sign Up</button>
 			</form>
